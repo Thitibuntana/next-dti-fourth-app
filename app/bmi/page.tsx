@@ -1,15 +1,55 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function BmiCalculatorPage() {
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [result, setResult] = useState("0.00");
+  const [status, setStatus] = useState("");
+
+  const handleCalculate = () => {
+    // Check if both fields are filled and valid numbers
+    const parsedWeight = parseFloat(weight);
+    const parsedHeight = parseFloat(height);
+
+    if (
+      isNaN(parsedWeight) ||
+      isNaN(parsedHeight) ||
+      parsedWeight <= 0 ||
+      parsedHeight <= 0
+    ) {
+      setResult("0.00");
+      setStatus("กรุณากรอกข้อมูลให้ถูกต้อง");
+      return;
+    }
+
+    // Convert height from cm to meters
+    const heightInMeters = parsedHeight / 100;
+
+    // Calculate BMI
+    const bmi = parsedWeight / (heightInMeters * heightInMeters);
+
+    // Update the result state with the calculated BMI, formatted to two decimal places
+    setResult(bmi.toFixed(2));
+
+    // Set BMI status
+    if (bmi < 18.5) {
+      setStatus("น้ำหนักต่ำกว่าเกณฑ์");
+    } else if (bmi >= 18.5 && bmi < 25) {
+      setStatus("ปกติ");
+    } else if (bmi >= 25 && bmi < 30) {
+      setStatus("น้ำหนักเกิน");
+    } else {
+      setStatus("อ้วน");
+    }
+  };
 
   const handleReset = () => {
     setWeight("");
     setHeight("");
     setResult("0.00");
+    setStatus("");
   };
 
   return (
@@ -20,7 +60,7 @@ export default function BmiCalculatorPage() {
           <h2 className="mt-2 text-lg text-blue-500">คำนวณค่าดัชนีมวลกาย</h2>
           <div className="flex justify-center my-4">
             <svg
-              className="w-10 h-10 sm:w-50 sm:h-50 text-blue-600"
+              className="w-10 h-10 sm:w-20 sm:h-20 text-blue-600"
               fill="currentColor"
               viewBox="0 0 24 24"
             >
@@ -68,7 +108,7 @@ export default function BmiCalculatorPage() {
         </div>
         <div className="flex justify-between mt-6 space-x-4">
           <button
-            // onClick={handleCalculate} // รอการเขียนฟังก์ชันคำนวณ
+            onClick={handleCalculate}
             className="flex-1 px-4 py-2 text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             คำนวณ
@@ -85,6 +125,17 @@ export default function BmiCalculatorPage() {
           <span className="block mt-1 text-2xl font-semibold text-blue-800">
             ค่าดัชนีมวลกาย: {result}
           </span>
+          {status && (
+            <p className="mt-2 text-sm text-gray-500">สถานะ: {status}</p>
+          )}
+        </div>
+        <div className="flex justify-center mt-4">
+          <Link
+            href="/"
+            className="w-full px-4 py-2 text-center text-blue-600 bg-blue-50 rounded-md shadow-sm hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            ย้อนกลับ
+          </Link>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function CarInstallmentCalculatorPage() {
   // State for all the input fields and the final result
@@ -213,6 +214,14 @@ export default function CarInstallmentCalculatorPage() {
             </span>
             <p className="text-gray-600">บาท</p>
           </div>
+          <div className="flex justify-center mt-4">
+          <Link
+            href="/"
+            className="w-full px-4 py-2 text-center text-blue-600 bg-blue-50 rounded-md shadow-sm hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            ย้อนกลับ
+          </Link>
+        </div>
         </div>
       </div>
     </div>
